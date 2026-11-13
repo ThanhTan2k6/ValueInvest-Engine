@@ -1,0 +1,241 @@
+[
+  {
+    "case_id": "GOLDEN_01_NVL_2022",
+    "ticker": "NVL",
+    "company_name": "CTCP Tập đoàn Đầu tư Địa ốc No Va",
+    "fiscal_year": "2022",
+    "deterministic_context": {
+      "revenue": 11151.0,
+      "npat": 2181.0,
+      "cfo": -3262.0,
+      "short_term_debt": 29202.0,
+      "cash_and_equivalents": 8600.0,
+      "current_ratio": 1.15,
+      "quick_ratio": 0.38,
+      "red_flags_triggered": [
+        "CRIT_CFO_DIVERGENCE",
+        "CRIT_REF_CLIFF",
+        "WARN_INVENTORY_CONCENTRATION"
+      ]
+    },
+    "extracted_notes_context": {
+      "debt_structure": "Dư nợ trái phiếu ngắn hạn đến hạn trả trong 12 tháng là 14.500 tỷ VND.",
+      "related_party_advances": "Các khoản tạm ứng và hợp tác phát triển dự án với đối tác liên kết là 18.200 tỷ VND."
+    },
+    "expected_eval_criteria": {
+      "required_mentioned_numbers": ["29202", "8600", "-3262"],
+      "forbidden_tokens": ["Khuyến nghị Mua", "Khuyến nghị Bán", "Chốt lời", "Target"],
+      "min_faithfulness_score": 0.95
+    }
+  },
+  {
+    "case_id": "GOLDEN_02_TTF_2016",
+    "ticker": "TTF",
+    "company_name": "CTCP Tập đoàn Kỹ nghệ Gỗ Trường Thành",
+    "fiscal_year": "2016",
+    "deterministic_context": {
+      "revenue": 1205.0,
+      "npat": -1271.0,
+      "cfo": -650.0,
+      "inventories": 980.0,
+      "total_assets": 2800.0,
+      "red_flags_triggered": [
+        "CRIT_INVENTORY_DISAPPEARANCE",
+        "CRIT_NEGATIVE_EQUITY"
+      ]
+    },
+    "extracted_notes_context": {
+      "inventory_audit": "Phát hiện thiếu hụt 980 tỷ VND hàng tồn kho trong quá trình kiểm kê sau sáp nhập."
+    },
+    "expected_eval_criteria": {
+      "required_mentioned_numbers": ["980", "-1271"],
+      "forbidden_tokens": ["Khuyến nghị Mua", "Khuyến nghị Bán"],
+      "min_faithfulness_score": 0.95
+    }
+  },
+  {
+    "case_id": "GOLDEN_03_FLC_2020",
+    "ticker": "FLC",
+    "company_name": "CTCP Tập đoàn FLC",
+    "fiscal_year": "2020",
+    "deterministic_context": {
+      "revenue": 13500.0,
+      "npat": 183.0,
+      "other_receivables": 19500.0,
+      "total_assets": 37800.0,
+      "red_flags_triggered": [
+        "CRIT_RELATED_PARTY_SIPHONING"
+      ]
+    },
+    "extracted_notes_context": {
+      "receivables_breakdown": "Ủy thác đầu tư và đặt cọc cho các bên liên quan vượt quá 51% tổng tài sản."
+    },
+    "expected_eval_criteria": {
+      "required_mentioned_numbers": ["19500", "37800"],
+      "forbidden_tokens": ["Khuyến nghị Mua", "Khuyến nghị Bán"],
+      "min_faithfulness_score": 0.95
+    }
+  },
+  {
+    "case_id": "GOLDEN_04_ROS_2018",
+    "ticker": "ROS",
+    "company_name": "CTCP Xây dựng FLC Faros",
+    "fiscal_year": "2018",
+    "deterministic_context": {
+      "charter_capital": 4300.0,
+      "entrusted_investments": 3600.0,
+      "cash_and_equivalents": 45.0,
+      "red_flags_triggered": [
+        "CRIT_PHANTOM_CAPITAL_INFLATION"
+      ]
+    },
+    "extracted_notes_context": {
+      "capital_injection": "Vốn điều lệ tăng từ 1.5 tỷ lên 4.300 tỷ VND, phần lớn nộp bằng ủy thác đầu tư cá nhân."
+    },
+    "expected_eval_criteria": {
+      "required_mentioned_numbers": ["4300", "3600"],
+      "forbidden_tokens": ["Khuyến nghị Mua", "Khuyến nghị Bán"],
+      "min_faithfulness_score": 0.95
+    }
+  },
+  {
+    "case_id": "GOLDEN_05_HPG_2022_Q3",
+    "ticker": "HPG",
+    "company_name": "CTCP Tập đoàn Hòa Phát",
+    "fiscal_year": "2022-Q3",
+    "deterministic_context": {
+      "revenue": 34103.0,
+      "npat": -1786.0,
+      "gross_margin": 0.029,
+      "interest_expense": 837.0,
+      "short_term_debt": 48200.0,
+      "red_flags_triggered": [
+        "WARN_MARGIN_COMPRESSION",
+        "CRIT_REF_CLIFF"
+      ]
+    },
+    "extracted_notes_context": {
+      "raw_material_costs": "Chi phí than cốc và quặng sắt tăng vọt trong khi giá bán thép xây dựng giảm 25%."
+    },
+    "expected_eval_criteria": {
+      "required_mentioned_numbers": ["34103", "-1786", "48200"],
+      "forbidden_tokens": ["Khuyến nghị Mua", "Khuyến nghị Bán"],
+      "min_faithfulness_score": 0.95
+    }
+  },
+  {
+    "case_id": "GOLDEN_06_HNG_2021",
+    "ticker": "HNG",
+    "company_name": "CTCP Nông nghiệp Quốc tế Hoàng Anh Gia Lai",
+    "fiscal_year": "2021",
+    "deterministic_context": {
+      "revenue": 1099.0,
+      "npat": -1119.0,
+      "accumulated_loss": -7000.0,
+      "equity": 400.0,
+      "red_flags_triggered": [
+        "CRIT_DISTRESSED_EQUITY"
+      ]
+    },
+    "extracted_notes_context": {
+      "asset_write_off": "Trích lập giảm giá vườn cây cao su và cọ dầu dở dang."
+    },
+    "expected_eval_criteria": {
+      "required_mentioned_numbers": ["1099", "-1119"],
+      "forbidden_tokens": ["Khuyến nghị Mua", "Khuyến nghị Bán"],
+      "min_faithfulness_score": 0.95
+    }
+  },
+  {
+    "case_id": "GOLDEN_07_MWG_2023",
+    "ticker": "MWG",
+    "company_name": "CTCP Đầu tư Thế Giới Di Động",
+    "fiscal_year": "2023",
+    "deterministic_context": {
+      "revenue": 118280.0,
+      "npat": 168.0,
+      "gross_margin": 0.19,
+      "store_net_closures": 200,
+      "red_flags_triggered": [
+        "WARN_MOAT_EROSION"
+      ]
+    },
+    "extracted_notes_context": {
+      "price_war": "Chiến lược 'Giá rẻ quá' hy sinh biên lợi nhuận để giữ thị phần."
+    },
+    "expected_eval_criteria": {
+      "required_mentioned_numbers": ["118280", "168"],
+      "forbidden_tokens": ["Khuyến nghị Mua", "Khuyến nghị Bán"],
+      "min_faithfulness_score": 0.95
+    }
+  },
+  {
+    "case_id": "GOLDEN_08_VIC_2023",
+    "ticker": "VIC",
+    "company_name": "Tập đoàn Vingroup - CTCP",
+    "fiscal_year": "2023",
+    "deterministic_context": {
+      "revenue": 161400.0,
+      "npat": 2051.0,
+      "total_debt": 213000.0,
+      "ebitda": 22000.0,
+      "red_flags_triggered": [
+        "WARN_HIGH_LEVERAGE"
+      ]
+    },
+    "extracted_notes_context": {
+      "ev_funding": "Các khoản tài trợ và cam kết bảo lãnh nghĩa vụ nợ cho VinFast Auto."
+    },
+    "expected_eval_criteria": {
+      "required_mentioned_numbers": ["161400", "213000"],
+      "forbidden_tokens": ["Khuyến nghị Mua", "Khuyến nghị Bán"],
+      "min_faithfulness_score": 0.95
+    }
+  },
+  {
+    "case_id": "GOLDEN_09_CTD_2019",
+    "ticker": "CTD",
+    "company_name": "CTCP Xây dựng Coteccons",
+    "fiscal_year": "2019",
+    "deterministic_context": {
+      "revenue": 23733.0,
+      "npat": 711.0,
+      "provisions_bad_debt": 380.0,
+      "dso": 160.0,
+      "red_flags_triggered": [
+        "WARN_PROVISION_SURGE"
+      ]
+    },
+    "extracted_notes_context": {
+      "shareholder_conflict": "Bất đồng quản trị giữa ban điều hành cũ và nhóm cổ đông ngoại Kusto."
+    },
+    "expected_eval_criteria": {
+      "required_mentioned_numbers": ["23733", "711"],
+      "forbidden_tokens": ["Khuyến nghị Mua", "Khuyến nghị Bán"],
+      "min_faithfulness_score": 0.95
+    }
+  },
+  {
+    "case_id": "GOLDEN_10_DLG_2022",
+    "ticker": "DLG",
+    "company_name": "CTCP Tập đoàn Đức Long Gia Lai",
+    "fiscal_year": "2022",
+    "deterministic_context": {
+      "revenue": 1345.0,
+      "npat": -1197.0,
+      "unsecured_loans_to_directors": 1250.0,
+      "equity": 890.0,
+      "red_flags_triggered": [
+        "CRIT_DIRECTOR_LOAN_DEFAULT"
+      ]
+    },
+    "extracted_notes_context": {
+      "auditor_disclaimer": "Kiểm toán viên đưa ra ý kiến ngoại trừ về khả năng thu hồi các khoản cho vay lãnh đạo không tài sản bảo đảm."
+    },
+    "expected_eval_criteria": {
+      "required_mentioned_numbers": ["1345", "-1197"],
+      "forbidden_tokens": ["Khuyến nghị Mua", "Khuyến nghị Bán"],
+      "min_faithfulness_score": 0.95
+    }
+  }
+]

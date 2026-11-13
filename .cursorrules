@@ -1,0 +1,78 @@
+# ==============================================================================
+# ValueInvest-Engine: Project Governance & Engineering Rules
+# Role: Principal AI Systems Architect & Quantitative FinTech Tech Lead
+# Standards: Spec-Driven Development, Decoupled Architecture, Zero Math Hallucination
+# ==============================================================================
+
+[ARCHITECTURAL_BOUNDARIES]
+1. ZERO LLM ARITHMETIC:
+   - LLMs (Large Language Models) are strictly probabilistic and MUST NEVER calculate financial numbers.
+   - Any financial calculation (ROE, ROIC, WACC, FCFF, FCFE, DCF, Intrinsic Value, Margin of Safety, Interest Coverage, Working Capital) MUST be executed exclusively by the Deterministic Math Engine (`src/engine/` and `src/valuation/`).
+   - The LLM's role is strictly limited to qualitative audit, forensic context extraction from Notes, Socratic reasoning, and thesis challenging based on numbers pre-calculated by the deterministic engine.
+
+2. IMPORT RESTRICTIONS:
+   - `src/engine/` and `src/valuation/` MUST NEVER import: `langchain`, `langgraph`, `openai`, `anthropic`, `google.genai`, `instructor`, `litellm`, or any LLM-related package.
+   - Any violation of this boundary will be rejected in CI via static linting (`flake8` / `import-linter`).
+
+3. ISOLATION & PIPELINE FLOW:
+   - Flow: Ingestion -> Sanitizer -> Deterministic Math Engine -> Structured JSON Context -> Multi-Agent AI (LangGraph) -> Pydantic Output Guardrails -> Presentation (UI).
+   - The Multi-Agent layer can only receive validated, immutable Pydantic objects or serialized JSON from the Math Engine.
+
+[DATA_AND_ACCOUNTING_INTEGRITY]
+1. BALANCE SHEET BALANCE IDENTITY:
+   - Every financial statement ingested and sanitized MUST satisfy the fundamental balance sheet equation:
+     Assets == Liabilities + Equity
+   - Tolerance threshold: Absolute difference must be < 1e-4 (0.0001 VND / unit). If violated, the record MUST fail ingestion with `AccountingBalanceError`.
+
+2. VIETNAMESE ACCOUNTING STANDARDS (VAS - Circular 200/2014/TT-BTC):
+   - Balance Sheet (Mẫu B01-DN):
+     * Total Assets (Code 270) = Current Assets (100) + Non-Current Assets (200)
+     * Total Resources (Code 440) = Total Liabilities (300) + Equity (400)
+     * Identity: Code 270 == Code 440
+   - Income Statement (Mẫu B02-DN):
+     * Net Revenue (Code 10) = Gross Revenue (01) - Revenue Deductions (02)
+     * Gross Profit (Code 20) = Net Revenue (10) - COGS (11)
+     * Net Operating Profit (Code 30) = Gross Profit (20) + Financial Income (21) - Financial Expenses (22) - Selling Expenses (25) - Admin Expenses (26)
+     * Net Profit Before Tax (Code 50) = Net Operating Profit (30) + Other Profit (40)
+     * Net Profit After Tax (Code 60) = Code 50 - Current CIT (51) - Deferred CIT (52)
+   - Cash Flow Statement (Mẫu B03-DN - Indirect & Direct):
+     * Net Operating Cash Flow (CFO), Net Investing Cash Flow (CFI), Net Financing Cash Flow (CFF).
+     * Net Change in Cash = CFO + CFI + CFF.
+
+[TYPE_SAFETY_AND_VALIDATION]
+1. PYTHON RUNTIME & TYPING:
+   - Python 3.11+ strictly required.
+   - 100% Type Hints everywhere (functions, class attributes, module variables).
+   - Use `typing.Annotated`, `typing.Literal`, `typing.Optional`, and `collections.abc` conventions.
+
+2. CONTRACT BOUNDARIES WITH PYDANTIC V2:
+   - All inter-module communication MUST pass through Pydantic v2 BaseModel classes with `model_config = ConfigDict(strict=True, frozen=True)`.
+   - Use `@field_validator` and `@model_validator(mode='after')` to validate financial sanity (e.g., non-negative revenues, valid ticker format).
+
+[ERROR_HANDLING_AND_FINANCIAL_GUARDRAILS]
+1. DIVISION BY ZERO HANDLING:
+   - In financial ratios where denominator can be zero (e.g., Interest Expense = 0 when computing Interest Coverage = EBIT / Interest Expense):
+     * DO NOT raise unhandled `ZeroDivisionError`.
+     * If Denominator == 0 and Numerator > 0: Return `float("inf")` or predefined Sentinel Value (e.g., `999.0`) indicating debt-free / fully covered.
+     * If Denominator == 0 and Numerator <= 0: Return `0.0` or `None` with an explicit reason logged.
+
+2. NEGATIVE VALUES & ANOMALIES:
+   - Negative Equity (Book Value of Equity < 0): D/E ratio calculation must flag `DistressedEquityWarning` instead of returning a misleading negative ratio.
+   - Negative CFO: Flag as a red-flag condition; do not let DCF fail silently.
+
+3. REGULATORY DISCLAIMER & BAN ON DIRECT ADVICE:
+   - VALUEINVEST-ENGINE IS A DECISION SUPPORT AND RISK AUDIT SYSTEM, NOT AN AUTOMATED BROKER.
+   - Hard filter: Agent responses MUST NEVER contain phrases like:
+     * "Khuyến nghị Mua", "Khuyến nghị Bán", "Chốt lời", "Cắt lỗ", "Tất tay", "Target price cam kết".
+   - Every generated report must conclude with the statutory disclaimer:
+     "Báo cáo này được lập cho mục đích cung cấp thông tin và kiểm toán rủi ro độc lập theo nguyên lý đầu tư giá trị. Đây không phải lời khuyên đầu tư tài chính theo quy định của Ủy ban Chứng khoán Nhà nước."
+
+[TESTING_AND_PERFORMANCE_STANDARDS]
+1. PYTEST COVERAGE:
+   - Minimum 80% line and branch coverage required for `src/engine/` and `src/valuation/`.
+   - Precision test against official Vietstock / FireAnt financial databases for top benchmark tickers (HPG, VNM, FPT).
+
+2. LATENCY & THROUGHPUT SLAs:
+   - Math Engine (DuPont + Red Flags + DCF + Sensitivity Matrix): < 2.0s for 5 years of historical quarterly data.
+   - Multi-Agent Orchestration (LangGraph 3 agents): < 6.0s (cold) or < 0.2s (with Redis Semantic Cache hit).
+   - Sensitivity Matrix computation: Vectorized with NumPy, must render 10x10 grid in < 50ms.
