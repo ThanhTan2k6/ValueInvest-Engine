@@ -22,11 +22,12 @@ jobs:
 
       - name: Install Linting Tools
         run: |
-          pip install ruff black mypy
+          pip install ruff
 
       - name: Verify Architectural Boundaries (Zero LLM Arithmetic in Math Engine)
         run: |
           echo "Checking boundary: src/engine/ and src/valuation/ must not import LLM packages"
+          mkdir -p src/engine src/valuation tests
           FORBIDDEN=$(grep -r -E "import langchain|import langgraph|import openai|import instructor|import litellm" src/engine/ src/valuation/ || true)
           if [ -n "$FORBIDDEN" ]; then
             echo "❌ VIOLATION DETECTED: LLM imports found in deterministic engine:"
@@ -60,11 +61,16 @@ jobs:
 
       - name: Run Pytest with Strict Coverage Enforcement
         run: |
-          pytest tests/test_engine_math.py tests/test_red_flags.py \
-            --cov=src/engine \
-            --cov=src/valuation \
-            --cov-report=term-missing \
-            --cov-fail-under=80 || echo "Test files will run once implementations are added in Phase 1"
+          if [ -f tests/test_engine_math.py ]; then
+            pytest tests/test_engine_math.py tests/test_red_flags.py \
+              --cov=src/engine \
+              --cov=src/valuation \
+              --cov-report=term-missing \
+              --cov-fail-under=80
+          else
+            echo "Running baseline test suite..."
+            pytest tests/ -v
+          fi
 
   llmops-faithfulness-evals:
     name: DeepEval Faithfulness Benchmark (Score >= 0.95)
